@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Research Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            min-height: 100vh;
+            color: #0ee661;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+            border-right: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-header {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .sidebar-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 3rem;
+            overflow-y: auto;
+        }
+
+        /* Header Styles */
+        .main-header {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background-color: #6699ff;
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .sub-header {
+            font-size: 1.4rem;
+            font-weight: 500;
+            background-color: #764ba2;
+            color: white;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 0.35rem 0;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ticker */
+        .ticker {
+            background: linear-gradient(90deg, #e94057 0%, #f27121 100%);
+            color: white;
+            padding: 1rem;
+            font-size: 1.06rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: tickerMove 18s linear infinite;
+        }
+
+        @keyframes tickerMove {
+            0% {
+                text-indent: 100%
+            }
+
+            100% {
+                text-indent: -100%
+            }
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2d3748;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #4a5568;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        /* Research Interface */
+        .research-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+        }
+
+        .example-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .example-btn {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .query-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .query-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Summary Display */
+        .summary-block {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid #38b2ac;
+            box-shadow: 0 8px 25px rgba(56, 178, 172, 0.2);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .article-block {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .article-block:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.2);
+        }
+
+        /* Download Section */
+        .download-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+        }
+
+        /* Expandable Sections */
+        .expandable {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .expandable-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .expandable-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .expandable.active .expandable-content {
+            display: block;
+        }
+
+        /* Footer */
+        .footer-banner {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            color: #f0f0f0;
+            margin-top: 3rem;
+        }
+
+        .footer-banner h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .footer-banner p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #d1ecf1;
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .main-header {
+                font-size: 2.5rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .example-buttons {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-header">🎛️ Control Panel</div>
+                <div class="control-buttons">
+                    <button class="sidebar-btn" onclick="testSystem()">🧪 System Test</button>
+                    <button class="sidebar-btn" onclick="showAnalytics()">📊 Analytics</button>
+                    <button class="sidebar-btn" onclick="contactSupport()">📞 Support</button>
+                    <button class="sidebar-btn" onclick="liveChat()">💬 Live Chat</button>
+                </div>
+                <button class="sidebar-btn" style="grid-column: 1 / -1;" onclick="resetData()">🔄 Reset All
+                    Data</button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-header">👤 User Profile</div>
+                <p><strong>🎭 Name:</strong> Ashish</p>
+                <p><strong>🏆 Role:</strong> Premium User</p>
+                <p><strong>📅 Member Since:</strong> 2023</p>
+                <p><strong>🔥 Status:</strong> 🟢 Active</p>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-header">⚡ Quick Stats</div>
+                <div style="display: grid; gap: 0.5rem;">
+                    <div>Queries Today: <strong id="todayQueries">5</strong></div>
+                    <div>Success Rate: <strong id="successRate">99.2%</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="main-header">News Research Assistant</h1>
+            <div class="sub-header">Professional AI-Powered News Analysis Tool</div>
+
+            <div class="ticker">
+                🚨 Breaking News: Government announces new policies | IPL 2025 schedule released | Global stock market
+                rallies | Major climate conference underway | Tech startups secure record funding | Cryptocurrency
+                prices surge!
+            </div>
+
+            <!-- Dashboard Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalQueries">42</span>
+                    <div class="stat-label">📈 Total Queries</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="todayQueriesMain">5</span>
+                    <div class="stat-label">⚡ Today's Queries</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="successRateMain">99.2%</span>
+                    <div class="stat-label">🎯 Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="historyItems">8</span>
+                    <div class="stat-label">📜 History Items</div>
+                </div>
+            </div>
+
+            <hr
+                style="margin: 2rem 0; border: none; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2);">
+
+            <!-- Research Interface -->
+            <div class="research-section">
+                <h3>Smart News Research Engine</h3>
+
+                <h4 style="margin: 1rem 0;">Quick Start Examples</h4>
+                <div class="example-buttons">
+                    <button class="example-btn" onclick="setQuery('Air India Crash')">✈️ Air India Crash</button>
+                    <button class="example-btn" onclick="setQuery('India-Pak War')">⚔️ India-Pak War</button>
+                    <button class="example-btn" onclick="setQuery('Israel-Iran War')">🌍 Israel-Iran War</button>
+                    <button class="example-btn" onclick="setQuery('IPL 2025 Incident')">🏏 IPL 2025 Incident</button>
+                    <button class="example-btn" onclick="setQuery('Tech Stock Market')">📈 Tech Stock Market</button>
+                    <button class="example-btn" onclick="setQuery('Climate Change News')">🌱 Climate Change
+                        News</button>
+                </div>
+
+                <h4 style="margin: 1rem 0;">Enter Your Research Query</h4>
+                <textarea class="query-input" id="queryInput" placeholder="Enter your news research query here...
+
+Examples:
+• Tesla stock performance Q3 2025
+• COVID-19 vaccine latest developments  
+• Cryptocurrency regulation updates
+• AI technology breakthrough news
+• Climate change policy changes
+• Indian startup funding trends"></textarea>
+
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="generateSummary()">⚡ Generate AI Summary</button>
+                    <button class="btn-secondary" onclick="clearQuery()">🔄 Clear Query</button>
+                    <button class="btn-secondary" onclick="showStats()">📊 Show Stats</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hidden">
+                <div class="summary-block">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">
+                        📰 <strong>Breaking News Analysis</strong>
+                    </h3>
+                    <h4 style="color: #667eea; margin-bottom: 1rem;" id="newsHeadline">Latest News Update</h4>
+                </div>
+
+                <h3>🤖 AI-Generated News Summary</h3>
+                <div id="summaryPoints">
+                    <!-- Summary points will be populated here -->
+                </div>
+
+                <h3>📑 Source Articles Referenced</h3>
+                <div id="sourceArticles">
+                    <!-- Source articles will be populated here -->
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" onclick="downloadTXT()">📄 Download as TXT</button>
+                    <button class="download-btn" onclick="downloadPDF()">📋 Download as PDF</button>
+                    <button class="download-btn" onclick="downloadJSON()">🔧 Download as JSON</button>
+                </div>
+            </div>
+
+            <!-- Additional Features -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                <!-- News Alerts -->
+                <div class="expandable" id="newsAlerts">
+                    <div class="expandable-header" onclick="toggleSection('newsAlerts')">
+                        🔔 Set News Alerts
+                    </div>
+                    <div class="expandable-content">
+                        <h4>Custom News Alerts</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                            <div>
+                                <input type="text" placeholder="Alert Topic"
+                                    style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+                                <select
+                                    style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option>Daily</option>
+                                    <option>Every Hour</option>
+                                    <option>Weekly</option>
+                                    <option>Real-time</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="email" placeholder="your@email.com"
+                                    style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+                                <select
+                                    style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option>🔴 Critical</option>
+                                    <option>🟡 High</option>
+                                    <option>🟢 Medium</option>
+                                    <option>🔵 Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="createAlert()" style="width: 100%;">📧 Create
+                            Alert</button>
+                    </div>
+                </div>
+
+                <!-- System Health -->
+                <div class="expandable" id="systemHealth">
+                    <div class="expandable-header" onclick="toggleSection('systemHealth')">
+                        🖥️ System Health Monitor
+                    </div>
+                    <div class="expandable-content">
+                        <h4>Real-time System Status</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <strong>🔧 System Components:</strong><br>
+                                🔗 News API: 🟢 Operational (99.9%)<br>
+                                🤖 AI Model: 🟢 Operational (99.8%)<br>
+                                💾 Database: 🟢 Operational (100%)<br>
+                            </div>
+                            <div>
+                                <strong>⚡ Performance Metrics:</strong><br>
+                                🔗 News API: 2.1ms avg<br>
+                                🤖 AI Model: 0.8s avg<br>
+                                💾 Database: 0.3ms avg<br>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold;">23%</div>
+                                <div>🌐 Server Load</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold;">67%</div>
+                                <div>💾 Memory Usage</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: bold;">184</div>
+                                <div>📡 API Calls/min</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="expandable" id="exportOptions">
+                <div class="expandable-header" onclick="toggleSection('exportOptions')">
+                    📤 Advanced Export Options
+                </div>
+                <div class="expandable-content">
+                    <h4>Export Formats & Sharing</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <button class="btn-primary" onclick="exportExcel()"
+                                style="width: 100%; margin-bottom: 0.5rem;">📊 Export to Excel</button>
+                            <button class="btn-primary" onclick="exportPowerPoint()" style="width: 100%;">📋 Export to
+                                PowerPoint</button>
+                        </div>
+                        <div>
+                            <button class="btn-primary" onclick="emailReport()"
+                                style="width: 100%; margin-bottom: 0.5rem;">📧 Email Report</button>
+                            <button class="btn-primary" onclick="generateShareLink()" style="width: 100%;">🔗 Generate
+                                Share Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query History -->
+            <div style="margin-top: 2rem;">
+                <hr
+                    style="margin: 2rem 0; border: none; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2);">
+                <h3>📚 Recent Query History</h3>
+                <div id="queryHistory">
+                    <!-- History items will be populated here -->
+                    <div class="article-block">
+                        <h4>🔍 Query 1: Tesla stock performance Q3 2025...</h4>
+                        <p><strong>Query:</strong> Tesla stock performance Q3 2025 analysis</p>
+                        <p><strong>Time:</strong> 2025-01-15 14:30:25</p>
+                        <p><strong>Summary:</strong> Tesla's Q3 2025 performance shows significant growth with increased
+                            deliveries and market expansion...</p>
+                        <button class="btn-secondary" style="margin-top: 0.5rem;">🔄 Rerun Query</button>
+                    </div>
+                    <div class="article-block">
+                        <h4>🔍 Query 2: AI technology breakthrough news...</h4>
+                        <p><strong>Query:</strong> AI technology breakthrough news latest developments</p>
+                        <p><strong>Time:</strong> 2025-01-15 13:45:12</p>
+                        <p><strong>Summary:</strong> Recent AI breakthroughs include advanced language models and
+                            computer vision improvements...</p>
+                        <button class="btn-secondary" style="margin-top: 0.5rem;">🔄 Rerun Query</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-banner">
+                <h3>AI-Powered News Research Assistant</h3>
+                <p>
+                    🎯 Built by Ashish Pachauri •
+                    🏢 Powered by NextHikes Technologies •
+                    🤖 Integrated with Advanced AI & Live NewsAPI
+                </p>
+                <div class="features">
+                    <div>⚡ Real-time Analysis</div>
+                    <div>📊 Advanced Analytics</div>
+                    <div>🌍 Global Coverage</div>
+                    <div>🚀 Lightning Fast</div>
+                </div>
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px groove rgba(255,255,255,0.3);">
+                    <p style="font-size: 0.95rem; color: #cccccc; text-align: center;">
+                        Contact Us: 011-123456 • 🌐 www.nexthikes.com • 📧 Email: support@nexthikes.com
+                    </p>
+                    <p
+                        style="font-size: 0.85rem; color: #bbbbbb; text-align: center; margin-top: 0.5rem; opacity: 0.75;">
+                        © 2025 NextHikes Technologies. All rights reserved. | Privacy Policy | Terms of Service | AI
+                        Ethics
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        let queryCount = 42;
+        let todayCount = 5;
+        let successRate = 99.2;
+        let historyCount = 8;
+
+        // Toggle expandable sections
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('active');
+        }
+
+        // Set query from example buttons
+        function setQuery(query) {
+            document.getElementById('queryInput').value = query;
+        }
+
+        // Clear query input
+        function clearQuery() {
+            document.getElementById('queryInput').value = '';
+        }
+
+        // Show loading and generate summary
+        function generateSummary() {
+            const query = document.getElementById('queryInput').value;
+            if (!query.trim()) {
+                alert('⚠️ Please enter a research query first to begin analysis!');
+                return;
+            }
+
+            // Show loading
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.innerHTML = '<div class="loading-spinner"></div><p style="text-align: center;">🤖 AI is analyzing global news sources...</p>';
+        }    
